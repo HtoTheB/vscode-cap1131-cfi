@@ -42,6 +42,8 @@ assert.equal(manifest.contributes.grammars[0].scopeName, 'source.selectron-cfi')
 assert.equal(grammar.scopeName, 'source.selectron-cfi');
 assert.ok(language.comments.blockComment.includes('(*'));
 assert.equal(manifest.contributes.configurationDefaults['[selectron-cfi]']['editor.semanticHighlighting.enabled'], true);
+assert.equal(manifest.contributes.configurationDefaults['[selectron-cfi]']['files.encoding'], 'iso88591');
+assert.equal(manifest.contributes.configurationDefaults['[selectron-cfi]']['files.autoGuessEncoding'], false);
 assert.equal(FUNCTION_SEMANTIC_TOKEN_TYPE, 'function', 'use VS Code’s built-in function token and its standard TextMate fallback');
 assert.equal(manifest.contributes.semanticTokenScopes, undefined, 'built-in function tokens need no custom scope mapping');
 assert.equal(manifest.contributes.semanticTokenTypes, undefined, 'built-in function tokens need no custom token declaration');
