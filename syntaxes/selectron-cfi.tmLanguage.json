@@ -194,6 +194,9 @@
               "include": "#types"
             },
             {
+              "include": "#st-function-call"
+            },
+            {
               "include": "#st-function-calls"
             },
             {
@@ -568,6 +571,60 @@
           "name": "entity.name.function.selectron-cfi"
         }
       }
+    },
+    "st-function-call": {
+      "name": "meta.function-call.st.selectron-cfi",
+      "begin": "\\b([A-Za-z_][A-Za-z0-9_]*)[\\t ]*(\\()",
+      "beginCaptures": {
+        "1": {
+          "name": "entity.name.function.selectron-cfi"
+        },
+        "2": {
+          "name": "punctuation.section.arguments.begin.selectron-cfi"
+        }
+      },
+      "end": "\\)",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.section.arguments.end.selectron-cfi"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#comments"
+        },
+        {
+          "include": "#strings"
+        },
+        {
+          "include": "#st-call-parameters"
+        },
+        {
+          "include": "#literals"
+        },
+        {
+          "include": "#iec-keywords"
+        },
+        {
+          "include": "#types"
+        },
+        {
+          "include": "#st-function-call"
+        },
+        {
+          "include": "#operators"
+        },
+        {
+          "include": "#numbers"
+        },
+        {
+          "include": "#identifiers"
+        }
+      ]
+    },
+    "st-call-parameters": {
+      "name": "variable.parameter.st.selectron-cfi",
+      "match": "\\b[A-Za-z_][A-Za-z0-9_]*(?=\\s*:=)"
     },
     "literals": {
       "patterns": [

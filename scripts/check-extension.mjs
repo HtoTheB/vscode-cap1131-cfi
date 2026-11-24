@@ -117,6 +117,38 @@ assertToken('structured-text.cfi', 'FUNCTION', 'keyword.declaration.selectron-cf
 assertToken('structured-text.cfi', 'BOOL', 'support.type.selectron-cfi');
 assertToken('structured-text.cfi', 'callTimer', 'entity.name.function.selectron-cfi', 'callTimer(IN := TRUE');
 assertToken('structured-text.cfi', 'BmsReceiver', 'entity.name.function.selectron-cfi', 'BmsReceiver(v_BmsStatusInfo := c_externalDirection)');
+assertToken('structured-text.cfi', 'IN', 'variable.parameter.st.selectron-cfi', 'callTimer(IN := TRUE');
+assertToken('structured-text.cfi', 'PT', 'variable.parameter.st.selectron-cfi', 'callTimer(IN := TRUE');
+const stParameterScopes = assertScopeAt(
+  'structured-text.cfi',
+  'BmsReceiver(v_BmsStatusInfo := c_externalDirection)',
+  'v_BmsStatusInfo',
+  0,
+  'variable.parameter.st.selectron-cfi'
+);
+const fbdParameterScopes = assertScopeAt(
+  'fbd.cfi',
+  'B(B_FB,NB_DoorControlCommon',
+  '?Bx_activated',
+  2,
+  'variable.parameter.input.fbd.selectron-cfi'
+);
+const parameterScopes = [
+  stParameterScopes.find((scope) => scope.startsWith('variable.parameter.')),
+  fbdParameterScopes.find((scope) => scope.startsWith('variable.parameter.'))
+];
+assert.ok(
+  parameterScopes.every((scope) => scope && scope.startsWith('variable.parameter.')),
+  'ST call parameters use the same variable.parameter scope family as FBD parameters'
+);
+const assignedScopes = assertScopeAt(
+  'structured-text.cfi',
+  'GE00_CalculateMovementDirection := 0',
+  'GE00_CalculateMovementDirection',
+  0,
+  'variable.other.selectron-cfi'
+);
+assert.ok(!assignedScopes.includes('variable.parameter.st.selectron-cfi'), 'plain assignment targets are not call parameters');
 assertToken('structured-text.cfi', 'GroupPath', 'support.type.property-name.selectron-cfi', '{GroupPath=');
 assertToken('structured-text.cfi', 'POUs.Test', 'string.unquoted.metadata-value.selectron-cfi', '{GroupPath=');
 assertToken('structured-text.cfi', 'UserVersion', 'support.type.property-name.selectron-cfi', '{UserVersion=');
