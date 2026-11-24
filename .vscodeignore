@@ -1,0 +1,8 @@
+node_modules/**
+*.pdf
+test/**
+scripts/**
+.vscode/**
+.gitignore
+.vscodeignore
+.github/**

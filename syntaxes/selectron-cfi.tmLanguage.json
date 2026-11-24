@@ -1,0 +1,764 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Selectron CAP CFI",
+  "scopeName": "source.selectron-cfi",
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#body-blocks"
+    },
+    {
+      "include": "#sfc-elements"
+    },
+    {
+      "include": "#project-settings"
+    },
+    {
+      "include": "#pou-declarations"
+    },
+    {
+      "include": "#pool-and-config-markers"
+    },
+    {
+      "include": "#variable-sections"
+    },
+    {
+      "include": "#key-value-settings"
+    },
+    {
+      "include": "#metadata"
+    },
+    {
+      "include": "#literals"
+    },
+    {
+      "include": "#iec-keywords"
+    },
+    {
+      "include": "#types"
+    },
+    {
+      "include": "#operators"
+    },
+    {
+      "include": "#numbers"
+    },
+    {
+      "include": "#identifiers"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.block.selectron-cfi",
+          "begin": "\\(\\*",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.begin.selectron-cfi"
+            }
+          },
+          "end": "\\*\\)",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.end.selectron-cfi"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#comments"
+            }
+          ]
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.single.selectron-cfi",
+          "begin": "'",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.begin.selectron-cfi"
+            }
+          },
+          "end": "'(?!')",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.selectron-cfi"
+            }
+          },
+          "patterns": [
+            {
+              "name": "constant.character.escape.selectron-cfi",
+              "match": "''|\\$[A-Za-z]"
+            }
+          ]
+        }
+      ]
+    },
+    "body-blocks": {
+      "patterns": [
+        {
+          "name": "meta.embedded.fbd.selectron-cfi",
+          "begin": "(?i)^\\s*(FBD_BODY)\\b",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.control.section.selectron-cfi"
+            }
+          },
+          "end": "(?i)^\\s*(END_FBD_BODY)\\b",
+          "endCaptures": {
+            "1": {
+              "name": "keyword.control.section.selectron-cfi"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#comments"
+            },
+            {
+              "include": "#strings"
+            },
+            {
+              "include": "#sfc-elements"
+            },
+            {
+              "include": "#network-markers"
+            },
+            {
+              "include": "#fbd-records"
+            },
+            {
+              "include": "#pool-and-config-markers"
+            },
+            {
+              "include": "#variable-sections"
+            },
+            {
+              "include": "#literals"
+            },
+            {
+              "include": "#iec-keywords"
+            },
+            {
+              "include": "#types"
+            },
+            {
+              "include": "#operators"
+            },
+            {
+              "include": "#numbers"
+            },
+            {
+              "include": "#identifiers"
+            }
+          ]
+        },
+        {
+          "name": "meta.embedded.st.selectron-cfi",
+          "begin": "(?i)^\\s*(ST_BODY)\\b",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.control.section.selectron-cfi"
+            }
+          },
+          "end": "(?i)^\\s*(END_ST_BODY)\\b",
+          "endCaptures": {
+            "1": {
+              "name": "keyword.control.section.selectron-cfi"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#comments"
+            },
+            {
+              "include": "#strings"
+            },
+            {
+              "include": "#sfc-elements"
+            },
+            {
+              "include": "#literals"
+            },
+            {
+              "include": "#iec-keywords"
+            },
+            {
+              "include": "#types"
+            },
+            {
+              "include": "#st-function-calls"
+            },
+            {
+              "include": "#operators"
+            },
+            {
+              "include": "#numbers"
+            },
+            {
+              "include": "#identifiers"
+            }
+          ]
+        }
+      ]
+    },
+    "sfc-elements": {
+      "patterns": [
+        {
+          "include": "#sfc-step-block"
+        },
+        {
+          "include": "#sfc-transition-block"
+        },
+        {
+          "include": "#sfc-action-block"
+        }
+      ]
+    },
+    "sfc-step-block": {
+      "name": "meta.sfc.step.selectron-cfi",
+      "begin": "(?i)\\b(INITIAL_STEP|STEP)\\s+([A-Za-z_][A-Za-z0-9_]*)\\s*(:)",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.step.selectron-cfi"
+        },
+        "2": {
+          "name": "entity.name.label.sfc-step.selectron-cfi"
+        },
+        "3": {
+          "name": "punctuation.separator.key-value.selectron-cfi"
+        }
+      },
+      "end": "(?i)\\b(END_STEP)\\b",
+      "endCaptures": {
+        "1": {
+          "name": "keyword.control.step.selectron-cfi"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#comments"
+        },
+        {
+          "include": "#strings"
+        },
+        {
+          "include": "#sfc-action-association"
+        },
+        {
+          "include": "#literals"
+        },
+        {
+          "include": "#iec-keywords"
+        },
+        {
+          "include": "#types"
+        },
+        {
+          "include": "#operators"
+        },
+        {
+          "include": "#numbers"
+        },
+        {
+          "include": "#identifiers"
+        }
+      ]
+    },
+    "sfc-transition-block": {
+      "name": "meta.sfc.transition.selectron-cfi",
+      "begin": "(?i)\\b(TRANSITION)\\b(?:\\s+((?!(?:FROM|PRIORITY)\\b)[A-Za-z_][A-Za-z0-9_]*))?(?:\\s*\\(\\s*(PRIORITY)\\s*(:=)\\s*([0-9]+)\\s*\\))?",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.transition.selectron-cfi"
+        },
+        "2": {
+          "name": "entity.name.label.sfc-transition.selectron-cfi"
+        },
+        "3": {
+          "name": "keyword.other.priority.selectron-cfi"
+        },
+        "4": {
+          "name": "keyword.operator.assignment.selectron-cfi"
+        },
+        "5": {
+          "name": "constant.numeric.selectron-cfi"
+        }
+      },
+      "end": "(?i)\\b(END_TRANSITION)\\b",
+      "endCaptures": {
+        "1": {
+          "name": "keyword.control.transition.selectron-cfi"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#comments"
+        },
+        {
+          "include": "#strings"
+        },
+        {
+          "include": "#il-instructions"
+        },
+        {
+          "include": "#fbd-records"
+        },
+        {
+          "include": "#network-markers"
+        },
+        {
+          "name": "punctuation.separator.transition-condition.selectron-cfi",
+          "match": ":(?!=)"
+        },
+        {
+          "include": "#literals"
+        },
+        {
+          "include": "#iec-keywords"
+        },
+        {
+          "include": "#types"
+        },
+        {
+          "include": "#operators"
+        },
+        {
+          "include": "#numbers"
+        },
+        {
+          "include": "#identifiers"
+        }
+      ]
+    },
+    "sfc-action-block": {
+      "name": "meta.sfc.action.selectron-cfi",
+      "begin": "(?i)\\b(ACTION)\\s+([A-Za-z_][A-Za-z0-9_]*)\\s*(:)",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.action.selectron-cfi"
+        },
+        "2": {
+          "name": "entity.name.function.sfc-action.selectron-cfi"
+        },
+        "3": {
+          "name": "punctuation.separator.key-value.selectron-cfi"
+        }
+      },
+      "end": "(?i)\\b(END_ACTION)\\b",
+      "endCaptures": {
+        "1": {
+          "name": "keyword.control.action.selectron-cfi"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#comments"
+        },
+        {
+          "include": "#strings"
+        },
+        {
+          "include": "#sfc-elements"
+        },
+        {
+          "include": "#il-instructions"
+        },
+        {
+          "include": "#fbd-records"
+        },
+        {
+          "include": "#network-markers"
+        },
+        {
+          "include": "#literals"
+        },
+        {
+          "include": "#iec-keywords"
+        },
+        {
+          "include": "#types"
+        },
+        {
+          "include": "#operators"
+        },
+        {
+          "include": "#numbers"
+        },
+        {
+          "include": "#identifiers"
+        }
+      ]
+    },
+    "il-instructions": {
+      "name": "support.function.instruction-list.selectron-cfi",
+      "match": "(?i)^\\s*(?:LDN?|STN?|S1?|R1?|ANDN?|ORN?|XORN?|NOT|ADD|SUB|MUL|DIV|MOD|GT|GE|EQ|NE|LE|LT|JMP|JMPCN?|CAL(?:CN?)?|RET(?:C|CN)?)\\b"
+    },
+    "sfc-action-association": {
+      "name": "meta.sfc.action-association.selectron-cfi",
+      "begin": "(?i)^\\s*([A-Za-z_][A-Za-z0-9_]*)\\s*(\\()",
+      "beginCaptures": {
+        "1": {
+          "name": "entity.name.function.sfc-action.selectron-cfi"
+        },
+        "2": {
+          "name": "punctuation.section.arguments.begin.selectron-cfi"
+        }
+      },
+      "end": "\\)",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.section.arguments.end.selectron-cfi"
+        }
+      },
+      "patterns": [
+        {
+          "name": "storage.modifier.action-qualifier.selectron-cfi",
+          "match": "(?i)\\b(?:SD|DS|SL|P0|P1|N|R|S|P|L|D)\\b(?=\\s*(?:,|\\)))"
+        },
+        {
+          "include": "#literals"
+        },
+        {
+          "include": "#strings"
+        },
+        {
+          "include": "#numbers"
+        },
+        {
+          "include": "#identifiers"
+        }
+      ]
+    },
+    "pou-declarations": {
+      "match": "(?i)\\b(FUNCTION_BLOCK|FUNCTION|PROGRAM|TYPE|CONFIGURATION|RESOURCE|TASK)\\s+([A-Za-z_][A-Za-z0-9_]*)",
+      "captures": {
+        "1": {
+          "name": "keyword.declaration.selectron-cfi"
+        },
+        "2": {
+          "name": "entity.name.type.selectron-cfi"
+        }
+      }
+    },
+    "pool-and-config-markers": {
+      "patterns": [
+        {
+          "name": "keyword.control.section.selectron-cfi",
+          "match": "(?i)\\b(?:BEGIN|END)_(?:ATTRIBUTES|OBJECT|PROPERTIES|DECLARATION|PLC_CONFIG|CONFIGURATION|RESOURCE|NET_WORK|NETWORK_BODY|FBD_BODY|ST_BODY|STRUCT|VAR|FUNCTION_BLOCK|FUNCTION|PROGRAM|TYPE)\\b"
+        },
+        {
+          "name": "keyword.control.section.selectron-cfi",
+          "match": "(?i)\\b(?:OBJECT_IMPORT|PLC_CONFIG|END_PLC_CONFIG)\\b"
+        },
+        {
+          "name": "support.type.property-name.selectron-cfi",
+          "match": "\\b(?:SaveVersion|CodePage|UserVersion|GroupPath|ParamCount|Flags|DefaultObject|Value|Comment|ItemName|Type)\\b"
+        }
+      ]
+    },
+    "project-settings": {
+      "name": "meta.section.project-settings.selectron-cfi",
+      "match": "(?i)^\\s*(\\[)([A-Za-z_][A-Za-z0-9_]*)?(\\])\\s*$",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.section.begin.selectron-cfi"
+        },
+        "2": {
+          "name": "entity.name.section.selectron-cfi"
+        },
+        "3": {
+          "name": "punctuation.definition.section.end.selectron-cfi"
+        }
+      }
+    },
+    "key-value-settings": {
+      "match": "^([ \\t]*)([A-Za-z_][A-Za-z0-9_.-]*)([ \\t]*)(=)(?!=)",
+      "captures": {
+        "2": {
+          "name": "support.type.property-name.selectron-cfi"
+        },
+        "4": {
+          "name": "keyword.operator.assignment.selectron-cfi"
+        }
+      }
+    },
+    "variable-sections": {
+      "patterns": [
+        {
+          "match": "(?i)\\b(VAR(?:_(?:INPUT|OUTPUT|IN_OUT|EXTERNAL|TEMP|GLOBAL))?)([ \\t]+)(CONSTANT)\\b",
+          "captures": {
+            "1": {
+              "name": "storage.type.section.selectron-cfi"
+            },
+            "3": {
+              "name": "storage.type.section.selectron-cfi"
+            }
+          }
+        },
+        {
+          "match": "(?i)\\b(?:VAR_GLOBAL|VAR_INPUT|VAR_OUTPUT|VAR_IN_OUT|VAR_EXTERNAL|VAR_TEMP|VAR_CONSTANT|VAR|END_VAR)\\b",
+          "name": "storage.type.section.selectron-cfi"
+        }
+      ]
+    },
+    "metadata": {
+      "patterns": [
+        {
+          "name": "meta.attribute.selectron-cfi",
+          "begin": "\\{",
+          "beginCaptures": {
+            "0": {
+              "name": "comment.block.punctuation.definition.metadata.begin.selectron-cfi"
+            }
+          },
+          "end": "\\}",
+          "endCaptures": {
+            "0": {
+              "name": "comment.block.punctuation.definition.metadata.end.selectron-cfi"
+            }
+          },
+          "patterns": [
+            {
+              "match": "([A-Za-z_][A-Za-z0-9_]*)([ \\t]*)(=)([^}\\r\\n]*)",
+              "captures": {
+                "1": {
+                  "name": "support.type.property-name.selectron-cfi"
+                },
+                "3": {
+                  "name": "keyword.operator.assignment.selectron-cfi"
+                },
+                "4": {
+                  "name": "string.unquoted.metadata-value.selectron-cfi"
+                }
+              }
+            },
+            {
+              "include": "#strings"
+            },
+            {
+              "include": "#numbers"
+            },
+            {
+              "include": "#identifiers"
+            }
+          ]
+        }
+      ]
+    },
+    "iec-keywords": {
+      "match": "(?i)\\b(?:AND|OR|XOR|NOT|MOD|DIV|IF|THEN|ELSIF|ELSE|END_IF|CASE|OF|END_CASE|FOR|TO|BY|DO|END_FOR|WHILE|END_WHILE|REPEAT|UNTIL|END_REPEAT|EXIT|RETURN|CONTINUE|CONSTANT|RETAIN|NON_RETAIN|TRUE|FALSE|CONFIGURATION|END_CONFIGURATION|RESOURCE|END_RESOURCE|TASK|WITH|ON|SINGLE|INTERVAL|PRIORITY|FROM|END_TRANSITION|INITIAL_STEP|STEP|END_STEP|TRANSITION|ACTION|END_ACTION)\\b",
+      "name": "keyword.control.selectron-cfi"
+    },
+    "types": {
+      "match": "(?i)\\b(?:BOOL|BYTE|WORD|DWORD|LWORD|SINT|USINT|INT|UINT|DINT|UDINT|LINT|ULINT|REAL|LREAL|TIME|LTIME|DATE|LDATE|TIME_OF_DAY|TOD|DATE_AND_TIME|DT|STRING|WSTRING|ARRAY|STRUCT|POINTER|REFERENCE|ANY|ANY[_]?SIMPLE|ANY_INT|ANY_REAL|ANY_NUM|ANY_BIT)\\b",
+      "name": "support.type.selectron-cfi"
+    },
+    "st-function-calls": {
+      "match": "\\b([A-Za-z_][A-Za-z0-9_]*)\\b(?=[\\t ]*\\()",
+      "captures": {
+        "1": {
+          "name": "entity.name.function.selectron-cfi"
+        }
+      }
+    },
+    "literals": {
+      "patterns": [
+        {
+          "name": "constant.language.selectron-cfi",
+          "match": "(?i)\\b(?:TRUE|FALSE)\\b"
+        },
+        {
+          "name": "constant.numeric.time.selectron-cfi",
+          "match": "(?i)\\b(?:LTOD|LDATE|LTIME|DATE_AND_TIME|TIME_OF_DAY|TOD|DT|DATE|TIME|T)#(?:[A-Za-z0-9_.:+-]+)"
+        },
+        {
+          "name": "constant.numeric.base.selectron-cfi",
+          "match": "(?i)\\b(?:2|8|16)#[0-9A-F_]+"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "entity.name.function.selectron-cfi",
+          "match": "@[A-Za-z_][A-Za-z0-9_]*(?:-[0-9]+)?"
+        },
+        {
+          "name": "variable.parameter.fbd.selectron-cfi",
+          "match": "\\?[A-Za-z_][A-Za-z0-9_]*\\??"
+        },
+        {
+          "name": "keyword.operator.selectron-cfi",
+          "match": ":=|=>|<=|>=|<>|\\+|-|\\*|/|=|<|>|\\^"
+        }
+      ]
+    },
+    "numbers": {
+      "match": "\\b(?:0[xX][0-9A-Fa-f_]+|(?:[0-9]+(?:_[0-9]+)*(?:\\.[0-9]+(?:_[0-9]+)*)?(?:[eE][+-]?[0-9]+)?))\\b",
+      "name": "constant.numeric.selectron-cfi"
+    },
+    "identifiers": {
+      "match": "\\b[A-Za-z_][A-Za-z0-9_]*\\b",
+      "name": "variable.other.selectron-cfi"
+    },
+    "network-markers": {
+      "patterns": [
+        {
+          "name": "keyword.control.network.selectron-cfi",
+          "match": "(?i)\\b(?:NET_WORK|END_NET_WORK|NETWORK_BODY|END_NETWORK_BODY|NETWORK_HEIGHT)\\b"
+        },
+        {
+          "name": "constant.numeric.selectron-cfi",
+          "match": "(?i)(?<=NETWORK_HEIGHT:=)\\s*[0-9]+"
+        }
+      ]
+    },
+    "fbd-records": {
+      "patterns": [
+        {
+          "name": "meta.fbd.comment-record.selectron-cfi",
+          "contentName": "comment.block.fbd-comment-text.selectron-cfi",
+          "begin": "(?i)(\\bB)(\\s*)(\\()(\\s*)(B_COMMENT)(\\s*,\\s*,\\s*)(')",
+          "beginCaptures": {
+            "1": {
+              "name": "entity.name.function.fbd.selectron-cfi"
+            },
+            "3": {
+              "name": "punctuation.section.arguments.begin.selectron-cfi"
+            },
+            "5": {
+              "name": "support.type.fbd-record.selectron-cfi"
+            },
+            "7": {
+              "name": "comment.block.punctuation.definition.comment.begin.selectron-cfi"
+            }
+          },
+          "end": "(?<!')'(?!')",
+          "endCaptures": {
+            "0": {
+              "name": "comment.block.punctuation.definition.comment.end.selectron-cfi"
+            }
+          }
+        },
+        {
+          "match": "(?i)(\\bB)(\\s*)(\\()(\\s*)(B_)(F)(\\s*,\\s*)(@?[A-Za-z_][A-Za-z0-9_]*(?:-[0-9]+)?)",
+          "captures": {
+            "1": {
+              "name": "entity.name.function.fbd.selectron-cfi"
+            },
+            "3": {
+              "name": "punctuation.section.arguments.begin.selectron-cfi"
+            },
+            "5": {
+              "name": "punctuation.separator.fbd-record-prefix.selectron-cfi"
+            },
+            "6": {
+              "name": "support.type.fbd-record.selectron-cfi"
+            },
+            "8": {
+              "name": "entity.name.function.selectron-cfi"
+            }
+          }
+        },
+        {
+          "match": "(?i)(\\bB)(\\s*)(\\()(\\s*)(B_)(FB)(\\s*,\\s*)([A-Za-z_][A-Za-z0-9_]*)",
+          "captures": {
+            "1": {
+              "name": "entity.name.function.fbd.selectron-cfi"
+            },
+            "3": {
+              "name": "punctuation.section.arguments.begin.selectron-cfi"
+            },
+            "5": {
+              "name": "punctuation.separator.fbd-record-prefix.selectron-cfi"
+            },
+            "6": {
+              "name": "support.type.fbd-record.selectron-cfi"
+            },
+            "8": {
+              "name": "entity.name.function.selectron-cfi"
+            }
+          }
+        },
+        {
+          "name": "support.function.fbd.selectron-cfi",
+          "match": "(?i)(\\bB)(\\s*)(\\()(\\s*)(B_(?:FB|VARIN|VAROUT|F|COMMENT))",
+          "captures": {
+            "1": {
+              "name": "entity.name.function.fbd.selectron-cfi"
+            },
+            "3": {
+              "name": "punctuation.section.arguments.begin.selectron-cfi"
+            },
+            "5": {
+              "name": "support.type.fbd-record.selectron-cfi"
+            }
+          }
+        },
+        {
+          "match": "(\\?)(B)([A-Za-z_][A-Za-z0-9_]*)",
+          "captures": {
+            "1": {
+              "name": "punctuation.separator.fbd-parameter.selectron-cfi"
+            },
+            "2": {
+              "name": "storage.modifier.fbd-parameter-direction.selectron-cfi"
+            },
+            "3": {
+              "name": "variable.parameter.input.fbd.selectron-cfi"
+            }
+          }
+        },
+        {
+          "match": "(\\?)(A)([A-Za-z_][A-Za-z0-9_]*)",
+          "captures": {
+            "1": {
+              "name": "punctuation.separator.fbd-parameter.selectron-cfi"
+            },
+            "2": {
+              "name": "storage.modifier.fbd-parameter-direction.selectron-cfi"
+            },
+            "3": {
+              "name": "variable.parameter.output.fbd.selectron-cfi"
+            }
+          }
+        },
+        {
+          "match": "(?i)(\\?D)(ANY[_]?SIMPLE)",
+          "captures": {
+            "1": {
+              "name": "punctuation.separator.fbd-connector-marker.selectron-cfi"
+            },
+            "2": {
+              "name": "support.type.selectron-cfi"
+            }
+          }
+        },
+        {
+          "name": "punctuation.separator.fbd-connector-marker.selectron-cfi",
+          "match": "\\?[A-Z]"
+        },
+        {
+          "name": "support.function.fbd-wire.selectron-cfi",
+          "match": "(?i)\\bL\\s*(?=\\()"
+        },
+        {
+          "name": "keyword.control.network.selectron-cfi",
+          "match": "(?i)\\b(?:NET_WORK|END_NET_WORK|NETWORK_BODY|END_NETWORK_BODY|NETWORK_HEIGHT)\\b"
+        },
+        {
+          "name": "constant.numeric.selectron-cfi",
+          "match": "(?<=NETWORK_HEIGHT:=)\\s*[0-9]+"
+        }
+      ]
+    }
+  }
+}

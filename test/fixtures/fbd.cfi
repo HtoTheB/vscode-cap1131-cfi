@@ -1,0 +1,20 @@
+FUNCTION_BLOCK ExampleFbd
+FBD_BODY
+    NET_WORK
+        NETWORK_HEIGHT:=4;
+        NETWORK_TITLE:='ordinary string stays a string';
+        NETWORK_BODY
+            B(B_FB,NB_DoorControlCommon,DoorControlCommon,28,1,49,8,,?Bx_activated?Bx_standStill?Bx_buttonOpenDoorsLeft?Bx_buttonOpenDoorsRight?Bx_buttonCloseDoors?Av_feedback?Ax_allDoorsClosed);
+            B(B_FB,GC01_CabManager,Manager,28,1,49,8,,?Bx_activated?Av_feedback);
+            B(B_F,@AND-2,,24,2,29,6,,?D?D?C);
+            B(B_F,min-2,,12,2,17,5,,?D?D?C);
+            B(B_F,min-2,,13,1,20,5,,?DanySimple?DanySimple?C);
+            B(B_F,@MUL-4,,20,0,25,6,,?D?D?D?D?C);
+            B(B_VARIN,,x_standstill,22,3,24,5,);
+            B(B_VAROUT,,x_ready,29,3,31,5,);
+            B(B_COMMENT,,'ready$nwhen all conditions pass',1,1,12,3,);
+            L(24,4,29,4);
+        END_NETWORK_BODY
+    END_NET_WORK
+END_FBD_BODY
+END_FUNCTION_BLOCK

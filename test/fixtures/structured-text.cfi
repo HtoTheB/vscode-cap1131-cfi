@@ -1,0 +1,38 @@
+BEGIN_ATTRIBUTES
+    SaveVersion=2
+    CodePage=1252
+END_ATTRIBUTES
+
+FUNCTION GE00_CalculateMovementDirection: USINT
+{GroupPath=POUs.Test}
+{UserVersion=DevOps #1018}
+VAR_INPUT
+    us_previousDirection: USINT:=0;
+    x_standstill: BOOL:=FALSE;
+END_VAR
+VAR CONSTANT
+    c_fixedDirection: USINT:=0;
+END_VAR
+VAR_EXTERNAL CONSTANT
+    c_externalDirection: USINT;
+END_VAR
+VAR_CONSTANT
+    c_compactStyle: BOOL:=FALSE;
+END_VAR
+VAR
+    callTimer: TON;
+    dutValue: ExampleDut;
+END_VAR
+ST_BODY
+callTimer(IN := TRUE, PT := T#1s);
+BmsReceiver(v_BmsStatusInfo := c_externalDirection);
+callTimer.Q := dutValue.Q;
+IF x_standstill THEN
+    GE00_CalculateMovementDirection := 0;
+ELSIF x_movingSide1 THEN
+    GE00_CalculateMovementDirection := 1;
+ELSE
+    GE00_CalculateMovementDirection := us_previousDirection;
+END_IF;
+END_ST_BODY
+END_FUNCTION

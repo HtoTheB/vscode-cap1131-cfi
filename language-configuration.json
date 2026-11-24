@@ -1,0 +1,49 @@
+{
+  "comments": {
+    "blockComment": [
+      "(*",
+      "*)"
+    ]
+  },
+  "brackets": [
+    ["(", ")"],
+    ["[", "]"],
+    ["{", "}"]
+  ],
+  "autoClosingPairs": [
+    {
+      "open": "(*",
+      "close": "*)",
+      "notIn": ["string"]
+    },
+    {
+      "open": "(",
+      "close": ")"
+    },
+    {
+      "open": "[",
+      "close": "]"
+    },
+    {
+      "open": "{",
+      "close": "}"
+    },
+    {
+      "open": "'",
+      "close": "'",
+      "notIn": ["string", "comment"]
+    }
+  ],
+  "surroundingPairs": [
+    ["(", ")"],
+    ["[", "]"],
+    ["{", "}"],
+    ["'", "'"]
+  ],
+  "folding": {
+    "markers": {
+      "start": "^\\s*(?:BEGIN_[A-Z_]+|(?:FBD|ST)_BODY\\b|(?:INITIAL_)?STEP\\s+[A-Za-z_][A-Za-z0-9_]*\\s*:|TRANSITION\\b|ACTION\\s+[A-Za-z_][A-Za-z0-9_]*\\s*:|NET_WORK\\b|NETWORK_BODY\\b|CASE\\b|REPEAT\\b|IF\\b)",
+      "end": "^\\s*(?:END_[A-Z_]+|END_NET_WORK\\b|END_NETWORK_BODY\\b|END_CASE\\b|UNTIL\\b|END_IF\\b)"
+    }
+  }
+}

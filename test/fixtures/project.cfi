@@ -1,0 +1,8 @@
+BEGIN_ATTRIBUTES
+    SaveVersion=2
+    CodePage=1252
+END_ATTRIBUTES
+[Param]
+BASE=MOS_xCPU94x_V3.3.1.01953
+[BuildCheck]
+WarnUnusedVar=TRUE

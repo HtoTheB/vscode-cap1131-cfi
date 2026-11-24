@@ -1,0 +1,53 @@
+{
+  "name": "selectron-cfi-language",
+  "displayName": "Selectron CAP CFI",
+  "description": "Syntax highlighting and static diagnostics for Selectron CAP .cfi project files",
+  "version": "0.1.0",
+  "publisher": "cfi-tools",
+  "license": "BSD-3-Clause",
+  "main": "./extension.js",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "activationEvents": [
+    "onLanguage:selectron-cfi",
+    "workspaceContains:**/*.cfi"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "selectron-cfi",
+        "aliases": [
+          "Selectron CFI",
+          "CAP CFI"
+        ],
+        "extensions": [
+          ".cfi"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "selectron-cfi",
+        "scopeName": "source.selectron-cfi",
+        "path": "./syntaxes/selectron-cfi.tmLanguage.json"
+      }
+    ],
+    "configurationDefaults": {
+      "[selectron-cfi]": {
+        "editor.semanticHighlighting.enabled": true
+      }
+    }
+  },
+  "scripts": {
+    "test": "node ./scripts/check-extension.mjs"
+  },
+  "devDependencies": {
+    "vscode-oniguruma": "^2.0.1",
+    "vscode-textmate": "^9.3.2"
+  }
+}

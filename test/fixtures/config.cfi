@@ -1,0 +1,11 @@
+BEGIN_OBJECT SELNODE : TRDP_NODE [1]
+    BEGIN_OBJECT SELMODUL : TRDP_NODE_PD_SUB 'subscriber'
+        BEGIN_OBJECT SELSUBMODUL : CfgPD_SUB 'CfgPD_SUB'
+            BEGIN_PROPERTIES
+                ParamCount:=2;
+                'ComId':=UDINT,Value:=1001,Comment:='ComId';
+                'CycleTime':=UINT,Value:=10,Comment:='milliseconds';
+            END_PROPERTIES
+        END_OBJECT
+    END_OBJECT
+END_OBJECT

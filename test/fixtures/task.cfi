@@ -1,0 +1,11 @@
+BEGIN_ATTRIBUTES
+    SaveVersion=2
+    CodePage=1252
+END_ATTRIBUTES
+
+CONFIGURATION scConfiguration
+    RESOURCE scResource ON scResourceType
+        TASK Main(SINGLE:=FALSE, INTERVAL:=T#10ms, PRIORITY:=31);
+        PROGRAM CYCLE WITH Main: scProgramType;
+    END_RESOURCE
+END_CONFIGURATION

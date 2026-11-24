@@ -1,0 +1,35 @@
+# CAP1131 CFI Language Support
+
+Syntax highlighting and language support for CAP1131 IDE `.cfi` project files (IEC 61131-3).
+
+## Features
+
+- TextMate syntax highlighting for `.cfi` files:
+  - Structured Text: declarations, control flow, types, literals, `(* ... *)` comments
+  - IEC 61131-3 textual SFC: steps, transitions, actions, action qualifiers, time literals
+  - FBD exports: FB and function records, variables, comments, connectors
+  - DUT `TYPE ... STRUCT` declarations
+  - Object and configuration records, task/resource configuration, project settings sections
+- Semantic tokens for function block instances: in `Timer.Q` the instance name `Timer` is highlighted, the output member is not
+- Static diagnostics in the Problems panel: mixed line endings (CAP1131 uses CRLF), mixed tab/space indentation, undeclared variable names in ST and FBD sections; disabled FBD networks are dimmed
+- ISO 8859-1 encoding defaults for `.cfi` documents
+
+The extension does not format source, compile PLC code or replace CAP1131 project validation. The details of the diagnostics and the test coverage are documented in `test/README.md`.
+
+## Installation
+
+Search for **CAP1131 CFI Language Support** in the VS Code Marketplace and install `henrik-braendle.cap1131-cfi`.
+
+## Development
+
+1. Open this folder in VS Code and press **F5** to launch an Extension Development Host.
+2. Open a `.cfi` file there; if the file is shown as another language, use **Change Language Mode → CAP1131 CFI**.
+3. Run `npm test` to tokenize the fixtures in `test/fixtures/` with the bundled TextMate/Oniguruma libraries and assert scopes, resolved theme colors and the static checks.
+
+## AI in development
+
+Large language models (LLMs) were used in the development process of this extension — for design, implementation, review and documentation. Commits created with AI assistance are recorded with an `Assisted-by: LLM` trailer. The design decisions and the review of the result are the maintainer's.
+
+## License
+
+BSD 3-Clause, see [LICENSE](LICENSE).

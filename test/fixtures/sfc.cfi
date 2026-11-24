@@ -1,0 +1,43 @@
+FUNCTION_BLOCK Sequencer
+VAR
+    x_start: BOOL:=FALSE;
+    x_valveOpen: BOOL:=FALSE;
+    DN1: BOOL:=FALSE;
+END_VAR
+
+INITIAL_STEP Idle:
+END_STEP
+
+STEP Opening:
+    OpenValve(N);
+END_STEP
+
+TRANSITION StartOpening (PRIORITY:=1) FROM Idle TO Opening
+    := x_start;
+END_TRANSITION
+
+STEP Holding:
+    KeepValveOpen(L,T#10s,DN1);
+    ResetValve(R);
+    SetValve(S);
+    PulseValve(P);
+    PulseRising(P1);
+    PulseFalling(P0);
+    DelayValve(D,T#2s);
+    StoredDelayValve(SD,T#3s);
+    DelayedStoredValve(DS,T#4s);
+    StoredLimitedValve(SL,T#5s);
+END_STEP
+
+TRANSITION FinishOpening FROM Opening TO Holding
+    := x_valveOpen;
+END_TRANSITION
+
+ACTION OpenValve:
+    x_valveOpen := TRUE;
+END_ACTION
+
+TRANSITION ILCondition FROM Holding TO Idle:
+    LD x_start
+    AND x_valveOpen
+END_TRANSITION

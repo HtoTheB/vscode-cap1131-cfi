@@ -1,0 +1,7 @@
+TYPE ExampleStatus:
+    STRUCT
+        x_valid: BOOL:=FALSE;
+        r_pressure_value: REAL:=0.0;
+        t_received: TIME:=T#0s;
+    END_STRUCT;
+END_TYPE
