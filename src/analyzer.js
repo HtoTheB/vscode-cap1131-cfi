@@ -134,16 +134,10 @@ function findFunctionBlockOutputAccesses(bodyText, bodyOffset, declaredNames, po
 
     while ((memberMatch = memberPattern.exec(masked)) !== null) {
       const instanceOffset = memberMatch.index;
-      const memberOffset = memberMatch.index + memberMatch[0].lastIndexOf(memberMatch[1]);
       accesses.push({
         start: bodyOffset + instanceOffset,
         end: bodyOffset + instanceOffset + instanceName.length,
         kind: 'function-block-instance-reference'
-      });
-      accesses.push({
-        start: bodyOffset + memberOffset,
-        end: bodyOffset + memberOffset + memberMatch[1].length,
-        kind: 'function-block-output-reference'
       });
     }
   }

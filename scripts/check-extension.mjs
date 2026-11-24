@@ -309,7 +309,8 @@ ST_BODY
 END_ST_BODY
 END_FUNCTION_BLOCK`;
 const fbOutputAnalysis = analyzeCfi(fbOutputSource);
-assert.deepEqual(fbOutputAnalysis.functionBlockOutputAccesses.map(({ start, end }) => fbOutputSource.slice(start, end)), ['timer', 'Q']);
+assert.deepEqual(fbOutputAnalysis.functionBlockOutputAccesses.map(({ start, end }) => fbOutputSource.slice(start, end)), ['timer'],
+  'only the called FB instance is highlighted; neither its Q member nor the DUT member is highlighted');
 const lineStarts = [0];
 for (let index = 0; index < fbOutputSource.length; index += 1) {
   if (fbOutputSource[index] === '\n') lineStarts.push(index + 1);
@@ -324,8 +325,7 @@ const testDocument = {
 assert.deepEqual(
   buildFunctionBlockOutputSemanticTokens(testDocument, fbOutputAnalysis.functionBlockOutputAccesses),
   [
-    { line: 8, start: 19, length: 5, type: FUNCTION_SEMANTIC_TOKEN_TYPE },
-    { line: 8, start: 25, length: 1, type: FUNCTION_SEMANTIC_TOKEN_TYPE }
+    { line: 8, start: 19, length: 5, type: FUNCTION_SEMANTIC_TOKEN_TYPE }
   ]
 );
 class FakePosition {
@@ -354,8 +354,7 @@ assert.deepEqual(emittedTokens.map(({ range, type }) => ({
   end: [range.end.line, range.end.character],
   type
 })), [
-  { start: [8, 19], end: [8, 24], type: 'function' },
-  { start: [8, 25], end: [8, 26], type: 'function' }
+  { start: [8, 19], end: [8, 24], type: 'function' }
 ]);
 
 const whitespaceAnalysis = analyzeCfi('\t  mixedIndent := TRUE;\r\n    spacesOnly := TRUE;\r\n\ttabsOnly := TRUE;\r\n');
