@@ -1,0 +1,25 @@
+{
+  "name": "CFI Test Theme",
+  "type": "dark",
+  "tokenColors": [
+    {
+      "scope": "entity.name.function",
+      "settings": {
+        "foreground": "#A6E22E"
+      }
+    },
+    {
+      "scope": "variable.parameter",
+      "settings": {
+        "foreground": "#FD971F",
+        "fontStyle": "italic"
+      }
+    },
+    {
+      "scope": "variable.other",
+      "settings": {
+        "foreground": "#F8F8F2"
+      }
+    }
+  ]
+}

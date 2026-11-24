@@ -420,7 +420,107 @@ assert.deepEqual(findVariableSectionLabels(variableSectionSource).map((item) => 
   'LOCAL'
 ]);
 
+// --- Color resolution -----------------------------------------------------------
+// The test theme mirrors the rules of the installed Monokai theme for the scopes
+// this extension emits (Monokai defines no rules for the .st./.fbd. sub-scopes, so
+// they resolve through the same parent rules here and in Monokai). This asserts the
+// final color VS Code derives from our scopes, catching scope renames that would
+// silently render as the default foreground.
+const cfiTestTheme = await readJson('test/theme/cfi-test-theme.json');
+const colorRegistry = new Registry({
+  onigLib: Promise.resolve({ createOnigScanner, createOnigString }),
+  theme: { settings: cfiTestTheme.tokenColors },
+  loadGrammar: async (scopeName) => scopeName === grammar.scopeName ? grammar : null
+});
+const colorTokenizer = await colorRegistry.loadGrammar(grammar.scopeName);
+const colorMap = colorRegistry.getColorMap();
+// vscode-textmate 9.x encodes the resolved theme attributes in the binary token
+// metadata: foreground color id in bits 15..23, font style in bits 11..14 (1 = italic).
+const FOREGROUND_MASK = 0x00ff8000;
+const FONT_STYLE_MASK = 0x00007800;
+
+function tokenizeFileWithTheme(text) {
+  const lines = text.split(/\r?\n/);
+  const tokensByLine = [];
+  let ruleStack = INITIAL;
+  for (const line of lines) {
+    const textResult = colorTokenizer.tokenizeLine(line, ruleStack);
+    const binaryResult = colorTokenizer.tokenizeLine2(line, ruleStack);
+    ruleStack = textResult.ruleStack;
+    const metaByStart = new Map();
+    for (let i = 0; i < binaryResult.tokens.length; i += 2) {
+      metaByStart.set(binaryResult.tokens[i], binaryResult.tokens[i + 1]);
+    }
+    tokensByLine.push(textResult.tokens.map((token) => {
+      const meta = metaByStart.get(token.startIndex) ?? 0;
+      return {
+        text: line.slice(token.startIndex, token.endIndex),
+        scope: token.scopes[token.scopes.length - 1],
+        foreground: colorMap[(meta & FOREGROUND_MASK) >>> 15] ?? null,
+        italic: (meta & FONT_STYLE_MASK) >>> 11 & 1
+      };
+    }));
+  }
+  return tokensByLine;
+}
+
+function findTokenColor(tokensByLine, lineHint, tokenText) {
+  for (const lineTokens of tokensByLine) {
+    if (!lineTokens.map((token) => token.text).join('').includes(lineHint)) continue;
+    const token = lineTokens.find((entry) => entry.text === tokenText)
+      ?? lineTokens.find((entry) => entry.text.includes(tokenText));
+    if (token) return token;
+  }
+  throw new Error(`color check: no token ${JSON.stringify(tokenText)} on line containing ${JSON.stringify(lineHint)}`);
+}
+
+const stColoredTokens = tokenizeFileWithTheme(fixtureText.get('structured-text.cfi'));
+const fbdColoredTokens = tokenizeFileWithTheme(fixtureText.get('fbd.cfi'));
+
+const stCallName = findTokenColor(stColoredTokens, 'callTimer(', 'callTimer');
+assert.equal(stCallName.foreground, '#A6E22E', 'ST call name keeps the theme function color');
+assert.equal(stCallName.italic, 0, 'ST call name is not italic');
+const stParameters = [
+  findTokenColor(stColoredTokens, 'callTimer(IN := TRUE', 'IN'),
+  findTokenColor(stColoredTokens, 'callTimer(IN := TRUE', 'PT'),
+  findTokenColor(stColoredTokens, 'BmsReceiver(v_BmsStatusInfo', 'v_BmsStatusInfo')
+];
+for (const parameter of stParameters) {
+  assert.equal(parameter.foreground, '#FD971F', `ST call parameter ${parameter.text} uses the theme parameter color`);
+  assert.equal(parameter.italic, 1, `ST call parameter ${parameter.text} keeps the theme parameter italic style`);
+}
+const fbdParameters = [
+  findTokenColor(fbdColoredTokens, 'B(B_FB,NB_DoorControlCommon', 'x_activated'),
+  findTokenColor(fbdColoredTokens, 'B(B_FB,NB_DoorControlCommon', 'v_feedback')
+];
+for (const parameter of fbdParameters) {
+  assert.equal(parameter.foreground, '#FD971F', `FBD parameter ${parameter.text} uses the theme parameter color`);
+  assert.equal(parameter.italic, 1, `FBD parameter ${parameter.text} keeps the theme parameter italic style`);
+}
+assert.equal(
+  stParameters[0].foreground,
+  fbdParameters[0].foreground,
+  'ST and FBD FB call parameters render with the identical color'
+);
+assert.equal(
+  stParameters[0].italic,
+  fbdParameters[0].italic,
+  'ST and FBD FB call parameters render with the identical style'
+);
+for (const [hint, name] of [['B(B_FB,NB_DoorControlCommon', 'NB_DoorControlCommon'], ['B(B_F,@AND-2', '@AND-2']]) {
+  const fbdName = findTokenColor(fbdColoredTokens, hint, name);
+  assert.equal(fbdName.foreground, '#A6E22E', `FBD name ${name} keeps the theme function color`);
+}
+const plainAssignment = findTokenColor(stColoredTokens, 'GE00_CalculateMovementDirection := 0', 'GE00_CalculateMovementDirection');
+assert.equal(plainAssignment.foreground, '#F8F8F2', 'plain assignment targets keep the plain variable color');
+assert.equal(plainAssignment.italic, 0, 'plain assignment targets are not italic');
+const dutField = findTokenColor(stColoredTokens, 'callTimer.Q := dutValue.Q;', 'dutValue');
+assert.equal(dutField.foreground, '#F8F8F2', 'DUT field accesses are not rendered as call parameters');
+const callValue = findTokenColor(stColoredTokens, 'BmsReceiver(v_BmsStatusInfo', 'c_externalDirection');
+assert.equal(callValue.foreground, '#F8F8F2', 'argument values are not rendered as parameters');
+
 console.log('TextMate grammar tokenized all representative fixtures and passed scope assertions.');
+console.log('Theme resolution passed: call names render function-colored, ST/FBD call parameters identical parameter color, plain variables untouched.');
 console.log('ST FB output spans and built-in function semantic-token encoding passed.');
 console.log('POU variable, FBD reference, mixed-indentation and raw line-ending checks passed.');
 console.log('Tests do not validate CAP-specific SFC serialization or compile PLC projects.');
