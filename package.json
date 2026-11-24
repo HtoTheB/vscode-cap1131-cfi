@@ -3,8 +3,23 @@
   "displayName": "Selectron CAP CFI",
   "description": "Syntax highlighting and static diagnostics for Selectron CAP .cfi project files",
   "version": "0.1.0",
-  "publisher": "cfi-tools",
+  "publisher": "henrik-braendle",
   "license": "BSD-3-Clause",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HtoTheB/cfi-language-extension.git"
+  },
+  "bugs": {
+    "url": "https://github.com/HtoTheB/cfi-language-extension/issues"
+  },
+  "keywords": [
+    "cfi",
+    "selectron",
+    "cap",
+    "iec 61131-3",
+    "plc",
+    "structured text"
+  ],
   "main": "./extension.js",
   "engines": {
     "vscode": "^1.85.0"
