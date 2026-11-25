@@ -9,7 +9,7 @@ const {
 } = require('./src/semantic-tokens');
 
 function isCfiDocument(document) {
-  return document.languageId === 'selectron-cfi' || /\.cfi$/i.test(document.uri.path);
+  return document.languageId === 'cap1131-cfi' || /\.cfi$/i.test(document.uri.path);
 }
 
 function makeRange(document, start, end) {
@@ -33,7 +33,7 @@ function makeDiagnostic(range, message, severity, code) {
 }
 
 function activate(context) {
-  const diagnosticCollection = vscode.languages.createDiagnosticCollection('selectron-cfi');
+  const diagnosticCollection = vscode.languages.createDiagnosticCollection('cap1131-cfi');
   const functionBlockOutputLegend = new vscode.SemanticTokensLegend([FUNCTION_SEMANTIC_TOKEN_TYPE]);
   const functionBlockOutputProvider = vscode.languages.registerDocumentSemanticTokensProvider(
     FUNCTION_BLOCK_DOCUMENT_SELECTOR,

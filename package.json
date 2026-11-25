@@ -7,10 +7,10 @@
   "license": "BSD-3-Clause",
   "repository": {
     "type": "git",
-    "url": "https://github.com/HtoTheB/cfi-language-extension.git"
+    "url": "https://github.com/HtoTheB/vscode-cap1131-cfi.git"
   },
   "bugs": {
-    "url": "https://github.com/HtoTheB/cfi-language-extension/issues"
+    "url": "https://github.com/HtoTheB/vscode-cap1131-cfi/issues"
   },
   "keywords": [
     "cap1131",
@@ -29,15 +29,15 @@
     "Programming Languages"
   ],
   "activationEvents": [
-    "onLanguage:selectron-cfi",
+    "onLanguage:cap1131-cfi",
     "workspaceContains:**/*.cfi"
   ],
   "contributes": {
     "languages": [
       {
-        "id": "selectron-cfi",
+        "id": "cap1131-cfi",
         "aliases": [
-          "Selectron CFI",
+          "CAP1131 CFI",
           "CAP CFI"
         ],
         "extensions": [
@@ -48,13 +48,13 @@
     ],
     "grammars": [
       {
-        "language": "selectron-cfi",
-        "scopeName": "source.selectron-cfi",
-        "path": "./syntaxes/selectron-cfi.tmLanguage.json"
+        "language": "cap1131-cfi",
+        "scopeName": "source.cap1131-cfi",
+        "path": "./syntaxes/cap1131-cfi.tmLanguage.json"
       }
     ],
     "configurationDefaults": {
-      "[selectron-cfi]": {
+      "[cap1131-cfi]": {
         "editor.semanticHighlighting.enabled": true,
         "files.encoding": "iso88591",
         "files.autoGuessEncoding": false

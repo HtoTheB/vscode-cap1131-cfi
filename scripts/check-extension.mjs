@@ -34,20 +34,20 @@ const readJson = async (path) => JSON.parse(await readFile(resolve(root, path), 
 
 const manifest = await readJson('package.json');
 const language = await readJson('language-configuration.json');
-const grammar = await readJson('syntaxes/selectron-cfi.tmLanguage.json');
+const grammar = await readJson('syntaxes/cap1131-cfi.tmLanguage.json');
 
-assert.equal(manifest.contributes.languages[0].id, 'selectron-cfi');
+assert.equal(manifest.contributes.languages[0].id, 'cap1131-cfi');
 assert.deepEqual(manifest.contributes.languages[0].extensions, ['.cfi']);
-assert.equal(manifest.contributes.grammars[0].scopeName, 'source.selectron-cfi');
-assert.equal(grammar.scopeName, 'source.selectron-cfi');
+assert.equal(manifest.contributes.grammars[0].scopeName, 'source.cap1131-cfi');
+assert.equal(grammar.scopeName, 'source.cap1131-cfi');
 assert.ok(language.comments.blockComment.includes('(*'));
-assert.equal(manifest.contributes.configurationDefaults['[selectron-cfi]']['editor.semanticHighlighting.enabled'], true);
-assert.equal(manifest.contributes.configurationDefaults['[selectron-cfi]']['files.encoding'], 'iso88591');
-assert.equal(manifest.contributes.configurationDefaults['[selectron-cfi]']['files.autoGuessEncoding'], false);
+assert.equal(manifest.contributes.configurationDefaults['[cap1131-cfi]']['editor.semanticHighlighting.enabled'], true);
+assert.equal(manifest.contributes.configurationDefaults['[cap1131-cfi]']['files.encoding'], 'iso88591');
+assert.equal(manifest.contributes.configurationDefaults['[cap1131-cfi]']['files.autoGuessEncoding'], false);
 assert.equal(FUNCTION_SEMANTIC_TOKEN_TYPE, 'function', 'use VS Code’s built-in function token and its standard TextMate fallback');
 assert.equal(manifest.contributes.semanticTokenScopes, undefined, 'built-in function tokens need no custom scope mapping');
 assert.equal(manifest.contributes.semanticTokenTypes, undefined, 'built-in function tokens need no custom token declaration');
-assert.ok(FUNCTION_BLOCK_DOCUMENT_SELECTOR.some((filter) => filter.language === 'selectron-cfi'));
+assert.ok(FUNCTION_BLOCK_DOCUMENT_SELECTOR.some((filter) => filter.language === 'cap1131-cfi'));
 assert.ok(FUNCTION_BLOCK_DOCUMENT_SELECTOR.some((filter) => filter.pattern === '**/*.cfi'), 'the provider also matches workspace-associated ST language IDs');
 
 const wasmFile = await readFile(resolve(root, 'node_modules/vscode-oniguruma/release/onig.wasm'));
@@ -58,7 +58,7 @@ const registry = new Registry({
   loadGrammar: async (scopeName) => scopeName === grammar.scopeName ? grammar : null
 });
 const tokenizer = await registry.loadGrammar(grammar.scopeName);
-assert.ok(tokenizer, 'TextMate should load the Selectron CFI grammar');
+assert.ok(tokenizer, 'TextMate should load the CAP1131 CFI grammar');
 
 const fixtures = new Map();
 const fixtureText = new Map();
@@ -113,25 +113,25 @@ function assertScopeAt(filename, lineHint, needle, offset, expectedScope) {
   return token.scopes;
 }
 
-assertToken('structured-text.cfi', 'FUNCTION', 'keyword.declaration.selectron-cfi');
-assertToken('structured-text.cfi', 'BOOL', 'support.type.selectron-cfi');
-assertToken('structured-text.cfi', 'callTimer', 'entity.name.function.selectron-cfi', 'callTimer(IN := TRUE');
-assertToken('structured-text.cfi', 'BmsReceiver', 'entity.name.function.selectron-cfi', 'BmsReceiver(v_BmsStatusInfo := c_externalDirection)');
-assertToken('structured-text.cfi', 'IN', 'variable.parameter.st.selectron-cfi', 'callTimer(IN := TRUE');
-assertToken('structured-text.cfi', 'PT', 'variable.parameter.st.selectron-cfi', 'callTimer(IN := TRUE');
+assertToken('structured-text.cfi', 'FUNCTION', 'keyword.declaration.cap1131-cfi');
+assertToken('structured-text.cfi', 'BOOL', 'support.type.cap1131-cfi');
+assertToken('structured-text.cfi', 'callTimer', 'entity.name.function.cap1131-cfi', 'callTimer(IN := TRUE');
+assertToken('structured-text.cfi', 'BmsReceiver', 'entity.name.function.cap1131-cfi', 'BmsReceiver(v_BmsStatusInfo := c_externalDirection)');
+assertToken('structured-text.cfi', 'IN', 'variable.parameter.st.cap1131-cfi', 'callTimer(IN := TRUE');
+assertToken('structured-text.cfi', 'PT', 'variable.parameter.st.cap1131-cfi', 'callTimer(IN := TRUE');
 const stParameterScopes = assertScopeAt(
   'structured-text.cfi',
   'BmsReceiver(v_BmsStatusInfo := c_externalDirection)',
   'v_BmsStatusInfo',
   0,
-  'variable.parameter.st.selectron-cfi'
+  'variable.parameter.st.cap1131-cfi'
 );
 const fbdParameterScopes = assertScopeAt(
   'fbd.cfi',
   'B(B_FB,NB_DoorControlCommon',
   '?Bx_activated',
   2,
-  'variable.parameter.input.fbd.selectron-cfi'
+  'variable.parameter.input.fbd.cap1131-cfi'
 );
 const parameterScopes = [
   stParameterScopes.find((scope) => scope.startsWith('variable.parameter.')),
@@ -146,78 +146,78 @@ const assignedScopes = assertScopeAt(
   'GE00_CalculateMovementDirection := 0',
   'GE00_CalculateMovementDirection',
   0,
-  'variable.other.selectron-cfi'
+  'variable.other.cap1131-cfi'
 );
-assert.ok(!assignedScopes.includes('variable.parameter.st.selectron-cfi'), 'plain assignment targets are not call parameters');
-assertToken('structured-text.cfi', 'GroupPath', 'support.type.property-name.selectron-cfi', '{GroupPath=');
-assertToken('structured-text.cfi', 'POUs.Test', 'string.unquoted.metadata-value.selectron-cfi', '{GroupPath=');
-assertToken('structured-text.cfi', 'UserVersion', 'support.type.property-name.selectron-cfi', '{UserVersion=');
-assertToken('structured-text.cfi', 'DevOps #1018', 'string.unquoted.metadata-value.selectron-cfi', '{UserVersion=');
-assertToken('structured-text.cfi', '=', 'keyword.operator.assignment.selectron-cfi', '{GroupPath=');
-assertToken('structured-text.cfi', 'SaveVersion', 'support.type.property-name.selectron-cfi', 'SaveVersion=2');
-assertToken('structured-text.cfi', '=', 'keyword.operator.assignment.selectron-cfi', 'SaveVersion=2');
-assertToken('structured-text.cfi', 'VAR', 'storage.type.section.selectron-cfi', 'VAR CONSTANT');
-assertToken('structured-text.cfi', 'CONSTANT', 'storage.type.section.selectron-cfi', 'VAR CONSTANT');
-assertToken('structured-text.cfi', 'CONSTANT', 'storage.type.section.selectron-cfi', 'VAR_EXTERNAL CONSTANT');
-assertToken('structured-text.cfi', 'VAR_CONSTANT', 'storage.type.section.selectron-cfi');
-assertScopeAt('structured-text.cfi', '{GroupPath=POUs.Test}', '{GroupPath=POUs.Test}', 0, 'comment.block.punctuation.definition.metadata.begin.selectron-cfi');
-assertScopeAt('structured-text.cfi', '{GroupPath=POUs.Test}', '{GroupPath=POUs.Test}', '{GroupPath=POUs.Test}'.length - 1, 'comment.block.punctuation.definition.metadata.end.selectron-cfi');
-assertToken('fbd.cfi', 'F', 'support.type.fbd-record.selectron-cfi', 'B(B_F,@AND-2');
-assertToken('fbd.cfi', '@AND-2', 'entity.name.function.selectron-cfi', 'B(B_F,@AND-2');
-assertToken('fbd.cfi', 'min-2', 'entity.name.function.selectron-cfi', 'B(B_F,min-2');
-assertToken('fbd.cfi', '@MUL-4', 'entity.name.function.selectron-cfi', 'B(B_F,@MUL-4');
-assertScopeAt('fbd.cfi', 'B(B_F,@AND-2', 'B_F', 2, 'support.type.fbd-record.selectron-cfi');
-assertToken('fbd.cfi', 'VARIN', 'support.type.fbd-record.selectron-cfi', 'B(B_VARIN');
-assertToken('fbd.cfi', 'NB_DoorControlCommon', 'entity.name.function.selectron-cfi', 'B(B_FB,NB_DoorControlCommon');
-assertToken('fbd.cfi', 'GC01_CabManager', 'entity.name.function.selectron-cfi', 'B(B_FB,GC01_CabManager');
-assertToken('fbd.cfi', 'FB', 'support.type.fbd-record.selectron-cfi', 'B(B_FB,NB_DoorControlCommon');
-assertToken('fbd.cfi', 'anySimple', 'support.type.selectron-cfi', 'B(B_F,min-2,,13,1,20,5');
+assert.ok(!assignedScopes.includes('variable.parameter.st.cap1131-cfi'), 'plain assignment targets are not call parameters');
+assertToken('structured-text.cfi', 'GroupPath', 'support.type.property-name.cap1131-cfi', '{GroupPath=');
+assertToken('structured-text.cfi', 'POUs.Test', 'string.unquoted.metadata-value.cap1131-cfi', '{GroupPath=');
+assertToken('structured-text.cfi', 'UserVersion', 'support.type.property-name.cap1131-cfi', '{UserVersion=');
+assertToken('structured-text.cfi', 'DevOps #1018', 'string.unquoted.metadata-value.cap1131-cfi', '{UserVersion=');
+assertToken('structured-text.cfi', '=', 'keyword.operator.assignment.cap1131-cfi', '{GroupPath=');
+assertToken('structured-text.cfi', 'SaveVersion', 'support.type.property-name.cap1131-cfi', 'SaveVersion=2');
+assertToken('structured-text.cfi', '=', 'keyword.operator.assignment.cap1131-cfi', 'SaveVersion=2');
+assertToken('structured-text.cfi', 'VAR', 'storage.type.section.cap1131-cfi', 'VAR CONSTANT');
+assertToken('structured-text.cfi', 'CONSTANT', 'storage.type.section.cap1131-cfi', 'VAR CONSTANT');
+assertToken('structured-text.cfi', 'CONSTANT', 'storage.type.section.cap1131-cfi', 'VAR_EXTERNAL CONSTANT');
+assertToken('structured-text.cfi', 'VAR_CONSTANT', 'storage.type.section.cap1131-cfi');
+assertScopeAt('structured-text.cfi', '{GroupPath=POUs.Test}', '{GroupPath=POUs.Test}', 0, 'comment.block.punctuation.definition.metadata.begin.cap1131-cfi');
+assertScopeAt('structured-text.cfi', '{GroupPath=POUs.Test}', '{GroupPath=POUs.Test}', '{GroupPath=POUs.Test}'.length - 1, 'comment.block.punctuation.definition.metadata.end.cap1131-cfi');
+assertToken('fbd.cfi', 'F', 'support.type.fbd-record.cap1131-cfi', 'B(B_F,@AND-2');
+assertToken('fbd.cfi', '@AND-2', 'entity.name.function.cap1131-cfi', 'B(B_F,@AND-2');
+assertToken('fbd.cfi', 'min-2', 'entity.name.function.cap1131-cfi', 'B(B_F,min-2');
+assertToken('fbd.cfi', '@MUL-4', 'entity.name.function.cap1131-cfi', 'B(B_F,@MUL-4');
+assertScopeAt('fbd.cfi', 'B(B_F,@AND-2', 'B_F', 2, 'support.type.fbd-record.cap1131-cfi');
+assertToken('fbd.cfi', 'VARIN', 'support.type.fbd-record.cap1131-cfi', 'B(B_VARIN');
+assertToken('fbd.cfi', 'NB_DoorControlCommon', 'entity.name.function.cap1131-cfi', 'B(B_FB,NB_DoorControlCommon');
+assertToken('fbd.cfi', 'GC01_CabManager', 'entity.name.function.cap1131-cfi', 'B(B_FB,GC01_CabManager');
+assertToken('fbd.cfi', 'FB', 'support.type.fbd-record.cap1131-cfi', 'B(B_FB,NB_DoorControlCommon');
+assertToken('fbd.cfi', 'anySimple', 'support.type.cap1131-cfi', 'B(B_F,min-2,,13,1,20,5');
 assert.deepEqual(
-  assertScopeAt('fbd.cfi', 'B(B_F,min-2,,12,2,17,5', 'min-2', 0, 'entity.name.function.selectron-cfi'),
-  assertScopeAt('fbd.cfi', 'B(B_F,@MUL-4', '@MUL-4', 0, 'entity.name.function.selectron-cfi'),
+  assertScopeAt('fbd.cfi', 'B(B_F,min-2,,12,2,17,5', 'min-2', 0, 'entity.name.function.cap1131-cfi'),
+  assertScopeAt('fbd.cfi', 'B(B_F,@MUL-4', '@MUL-4', 0, 'entity.name.function.cap1131-cfi'),
   'FBD function names with and without @ must receive identical scopes'
 );
 assert.deepEqual(
-  assertScopeAt('fbd.cfi', 'B(B_F,min-2,,12,2,17,5', 'min-2', 0, 'entity.name.function.selectron-cfi'),
-  assertScopeAt('fbd.cfi', 'B(B_FB,GC01_CabManager', 'GC01_CabManager', 0, 'entity.name.function.selectron-cfi'),
+  assertScopeAt('fbd.cfi', 'B(B_F,min-2,,12,2,17,5', 'min-2', 0, 'entity.name.function.cap1131-cfi'),
+  assertScopeAt('fbd.cfi', 'B(B_FB,GC01_CabManager', 'GC01_CabManager', 0, 'entity.name.function.cap1131-cfi'),
   'FBD function and function-block type names must receive identical scopes'
 );
-assertToken('fbd.cfi', 'END_FUNCTION_BLOCK', 'keyword.control.section.selectron-cfi');
-assertToken('fbd.cfi', 'ready$nwhen all conditions pass', 'comment.block.fbd-comment-text.selectron-cfi', 'B(B_COMMENT');
-assertToken('fbd.cfi', 'ordinary string stays a string', 'string.quoted.single.selectron-cfi');
-assertToken('fbd.cfi', 'x_activated', 'variable.parameter.input.fbd.selectron-cfi', 'B(B_FB,NB_DoorControlCommon');
-assertToken('fbd.cfi', 'v_feedback', 'variable.parameter.output.fbd.selectron-cfi', 'B(B_FB,NB_DoorControlCommon');
-assertScopeAt('fbd.cfi', 'B(B_FB,NB_DoorControlCommon', '?Bx_activated', 0, 'punctuation.separator.fbd-parameter.selectron-cfi');
-assertScopeAt('fbd.cfi', 'B(B_FB,NB_DoorControlCommon', '?Bx_activated', 1, 'storage.modifier.fbd-parameter-direction.selectron-cfi');
-assertScopeAt('fbd.cfi', 'B(B_FB,NB_DoorControlCommon', '?Bx_activated', 2, 'variable.parameter.input.fbd.selectron-cfi');
-assertScopeAt('fbd.cfi', 'B(B_F,@AND-2', '?D?D?C', 0, 'punctuation.separator.fbd-connector-marker.selectron-cfi');
-assertScopeAt('fbd.cfi', 'B(B_F,@AND-2', '?D?D?C', 4, 'punctuation.separator.fbd-connector-marker.selectron-cfi');
-assertToken('fbd.cfi', '$n', 'comment.block.fbd-comment-text.selectron-cfi', 'B(B_COMMENT');
-assertToken('config.cfi', 'BEGIN_OBJECT', 'keyword.control.section.selectron-cfi');
-assertToken('project.cfi', '[Param]', 'meta.section.project-settings.selectron-cfi');
-assertToken('project.cfi', 'BASE', 'support.type.property-name.selectron-cfi');
-assertToken('task.cfi', 'CONFIGURATION', 'keyword.declaration.selectron-cfi');
-assertToken('task.cfi', 'TASK', 'keyword.declaration.selectron-cfi');
-assertToken('sfc.cfi', 'INITIAL_STEP', 'keyword.control.step.selectron-cfi');
-assertToken('sfc.cfi', 'Idle', 'entity.name.label.sfc-step.selectron-cfi');
-assertToken('sfc.cfi', 'TRANSITION', 'keyword.control.transition.selectron-cfi');
-assertToken('sfc.cfi', 'StartOpening', 'entity.name.label.sfc-transition.selectron-cfi');
-assertToken('sfc.cfi', 'PRIORITY', 'keyword.other.priority.selectron-cfi');
-assertToken('sfc.cfi', 'ACTION', 'keyword.control.action.selectron-cfi');
-assertToken('sfc.cfi', 'OpenValve(N)', 'meta.sfc.action-association.selectron-cfi');
-assertToken('sfc.cfi', 'N', 'storage.modifier.action-qualifier.selectron-cfi', 'OpenValve(N)');
-assertToken('sfc.cfi', 'L', 'storage.modifier.action-qualifier.selectron-cfi', 'KeepValveOpen(L,T#10s,DN1)');
-assertToken('sfc.cfi', 'R', 'storage.modifier.action-qualifier.selectron-cfi', 'ResetValve(R)');
-assertToken('sfc.cfi', 'S', 'storage.modifier.action-qualifier.selectron-cfi', 'SetValve(S)');
-assertToken('sfc.cfi', 'P', 'storage.modifier.action-qualifier.selectron-cfi', 'PulseValve(P)');
-assertToken('sfc.cfi', 'P1', 'storage.modifier.action-qualifier.selectron-cfi', 'PulseRising(P1)');
-assertToken('sfc.cfi', 'P0', 'storage.modifier.action-qualifier.selectron-cfi', 'PulseFalling(P0)');
-assertToken('sfc.cfi', 'D', 'storage.modifier.action-qualifier.selectron-cfi', 'DelayValve(D,T#2s)');
-assertToken('sfc.cfi', 'SD', 'storage.modifier.action-qualifier.selectron-cfi', 'StoredDelayValve(SD,T#3s)');
-assertToken('sfc.cfi', 'DS', 'storage.modifier.action-qualifier.selectron-cfi', 'DelayedStoredValve(DS,T#4s)');
-assertToken('sfc.cfi', 'SL', 'storage.modifier.action-qualifier.selectron-cfi', 'StoredLimitedValve(SL,T#5s)');
-assertToken('sfc.cfi', 'T#10s', 'constant.numeric.time.selectron-cfi');
-assertToken('sfc.cfi', 'LD', 'support.function.instruction-list.selectron-cfi');
+assertToken('fbd.cfi', 'END_FUNCTION_BLOCK', 'keyword.control.section.cap1131-cfi');
+assertToken('fbd.cfi', 'ready$nwhen all conditions pass', 'comment.block.fbd-comment-text.cap1131-cfi', 'B(B_COMMENT');
+assertToken('fbd.cfi', 'ordinary string stays a string', 'string.quoted.single.cap1131-cfi');
+assertToken('fbd.cfi', 'x_activated', 'variable.parameter.input.fbd.cap1131-cfi', 'B(B_FB,NB_DoorControlCommon');
+assertToken('fbd.cfi', 'v_feedback', 'variable.parameter.output.fbd.cap1131-cfi', 'B(B_FB,NB_DoorControlCommon');
+assertScopeAt('fbd.cfi', 'B(B_FB,NB_DoorControlCommon', '?Bx_activated', 0, 'punctuation.separator.fbd-parameter.cap1131-cfi');
+assertScopeAt('fbd.cfi', 'B(B_FB,NB_DoorControlCommon', '?Bx_activated', 1, 'storage.modifier.fbd-parameter-direction.cap1131-cfi');
+assertScopeAt('fbd.cfi', 'B(B_FB,NB_DoorControlCommon', '?Bx_activated', 2, 'variable.parameter.input.fbd.cap1131-cfi');
+assertScopeAt('fbd.cfi', 'B(B_F,@AND-2', '?D?D?C', 0, 'punctuation.separator.fbd-connector-marker.cap1131-cfi');
+assertScopeAt('fbd.cfi', 'B(B_F,@AND-2', '?D?D?C', 4, 'punctuation.separator.fbd-connector-marker.cap1131-cfi');
+assertToken('fbd.cfi', '$n', 'comment.block.fbd-comment-text.cap1131-cfi', 'B(B_COMMENT');
+assertToken('config.cfi', 'BEGIN_OBJECT', 'keyword.control.section.cap1131-cfi');
+assertToken('project.cfi', '[Param]', 'meta.section.project-settings.cap1131-cfi');
+assertToken('project.cfi', 'BASE', 'support.type.property-name.cap1131-cfi');
+assertToken('task.cfi', 'CONFIGURATION', 'keyword.declaration.cap1131-cfi');
+assertToken('task.cfi', 'TASK', 'keyword.declaration.cap1131-cfi');
+assertToken('sfc.cfi', 'INITIAL_STEP', 'keyword.control.step.cap1131-cfi');
+assertToken('sfc.cfi', 'Idle', 'entity.name.label.sfc-step.cap1131-cfi');
+assertToken('sfc.cfi', 'TRANSITION', 'keyword.control.transition.cap1131-cfi');
+assertToken('sfc.cfi', 'StartOpening', 'entity.name.label.sfc-transition.cap1131-cfi');
+assertToken('sfc.cfi', 'PRIORITY', 'keyword.other.priority.cap1131-cfi');
+assertToken('sfc.cfi', 'ACTION', 'keyword.control.action.cap1131-cfi');
+assertToken('sfc.cfi', 'OpenValve(N)', 'meta.sfc.action-association.cap1131-cfi');
+assertToken('sfc.cfi', 'N', 'storage.modifier.action-qualifier.cap1131-cfi', 'OpenValve(N)');
+assertToken('sfc.cfi', 'L', 'storage.modifier.action-qualifier.cap1131-cfi', 'KeepValveOpen(L,T#10s,DN1)');
+assertToken('sfc.cfi', 'R', 'storage.modifier.action-qualifier.cap1131-cfi', 'ResetValve(R)');
+assertToken('sfc.cfi', 'S', 'storage.modifier.action-qualifier.cap1131-cfi', 'SetValve(S)');
+assertToken('sfc.cfi', 'P', 'storage.modifier.action-qualifier.cap1131-cfi', 'PulseValve(P)');
+assertToken('sfc.cfi', 'P1', 'storage.modifier.action-qualifier.cap1131-cfi', 'PulseRising(P1)');
+assertToken('sfc.cfi', 'P0', 'storage.modifier.action-qualifier.cap1131-cfi', 'PulseFalling(P0)');
+assertToken('sfc.cfi', 'D', 'storage.modifier.action-qualifier.cap1131-cfi', 'DelayValve(D,T#2s)');
+assertToken('sfc.cfi', 'SD', 'storage.modifier.action-qualifier.cap1131-cfi', 'StoredDelayValve(SD,T#3s)');
+assertToken('sfc.cfi', 'DS', 'storage.modifier.action-qualifier.cap1131-cfi', 'DelayedStoredValve(DS,T#4s)');
+assertToken('sfc.cfi', 'SL', 'storage.modifier.action-qualifier.cap1131-cfi', 'StoredLimitedValve(SL,T#5s)');
+assertToken('sfc.cfi', 'T#10s', 'constant.numeric.time.cap1131-cfi');
+assertToken('sfc.cfi', 'LD', 'support.function.instruction-list.cap1131-cfi');
 
 const variableAnalysis = analyzeCfi(`FUNCTION_BLOCK LocalPOU
 VAR_INPUT
