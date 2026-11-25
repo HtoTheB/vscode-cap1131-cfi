@@ -1,0 +1,36 @@
+name: Build release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  release:
+    name: Package and publish GitHub Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm test
+      - name: Package extension
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          npx --yes @vscode/vsce package --out "cap1131-cfi-${VERSION}.vsix" --no-dependencies
+      - name: Create or update GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          VSIX="cap1131-cfi-${VERSION}.vsix"
+          if gh release view "v${VERSION}" >/dev/null 2>&1; then
+            gh release upload --clobber "v${VERSION}" "${VSIX}"
+          else
+            gh release create "v${VERSION}" "${VSIX}" --title "v${VERSION}" --generate-notes
+          fi
