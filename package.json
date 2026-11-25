@@ -1,7 +1,7 @@
 {
-  "name": "selectron-cfi-language",
-  "displayName": "Selectron CAP CFI",
-  "description": "Syntax highlighting and static diagnostics for Selectron CAP .cfi project files",
+  "name": "cap1131-cfi",
+  "displayName": "CAP1131 CFI Language Support",
+  "description": "Syntax highlighting and language support for CAP1131 IDE .cfi files (IEC 61131-3).",
   "version": "0.1.0",
   "publisher": "henrik-braendle",
   "license": "BSD-3-Clause",
@@ -13,12 +13,13 @@
     "url": "https://github.com/HtoTheB/cfi-language-extension/issues"
   },
   "keywords": [
+    "cap1131",
     "cfi",
-    "selectron",
-    "cap",
     "iec 61131-3",
+    "iec61131",
+    "structured text",
     "plc",
-    "structured text"
+    "sps"
   ],
   "main": "./extension.js",
   "engines": {

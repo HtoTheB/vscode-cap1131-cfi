@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Run Selectron CFI Extension",
+      "name": "Run CAP1131 CFI Extension",
       "type": "extensionHost",
       "request": "launch",
       "args": [

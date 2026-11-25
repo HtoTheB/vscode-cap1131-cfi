@@ -27,7 +27,7 @@ function getLineEndRange(document, lineNumber) {
 
 function makeDiagnostic(range, message, severity, code) {
   const result = new vscode.Diagnostic(range, message, severity);
-  result.source = 'Selectron CFI';
+  result.source = 'CAP1131 CFI';
   result.code = code;
   return result;
 }
