@@ -18,7 +18,7 @@ The extension does not format source, compile PLC code or replace CAP1131 projec
 
 ## Installation
 
-**VS Code Marketplace:** search for **CAP1131 CFI Language Support** and install `henrik-braendle.cap1131-cfi`.
+**VS Code Marketplace:** search for **CAP1131 CFI Language Support** and install `htotheb.cap1131-cfi`.
 
 **GitHub release:** each tagged version gets a release with a `.vsix` file, the standard VS Code extension package. Download `cap1131-cfi-<version>.vsix` from the [Releases](https://github.com/HtoTheB/vscode-cap1131-cfi/releases) page, then either:
 
