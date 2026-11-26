@@ -36,10 +36,6 @@
     "languages": [
       {
         "id": "cap1131-cfi",
-        "aliases": [
-          "CAP1131 CFI",
-          "CAP CFI"
-        ],
         "extensions": [
           ".cfi"
         ],

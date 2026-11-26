@@ -30,7 +30,7 @@ Installing from a file needs no Marketplace account and works for versions that 
 ## Development
 
 1. Open this folder in VS Code and press **F5** to launch an Extension Development Host.
-2. Open a `.cfi` file there; if the file is shown as another language, use **Change Language Mode → CAP1131 CFI**.
+2. Open a `.cfi` file there; if the file is shown as another language, use **Change Language Mode → cap1131-cfi**.
 3. Run `npm test` to tokenize the fixtures in `test/fixtures/` with the bundled TextMate/Oniguruma libraries and assert scopes, resolved theme colors and the static checks.
 
 ## AI in development
