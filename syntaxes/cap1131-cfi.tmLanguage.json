@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-  "name": "CAP1131 CFI Language Support",
+  "name": "CAP1131 CFI",
   "scopeName": "source.cap1131-cfi",
   "patterns": [
     {
