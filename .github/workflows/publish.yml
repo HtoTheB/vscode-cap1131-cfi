@@ -19,4 +19,4 @@ jobs:
           node-version: 22
       - run: npm ci
       - run: npm test
-      - run: npx --yes @vscode/vsce publish --oidc
+      - run: npx --yes @vscode/vsce@4.1.1 publish --oidc
