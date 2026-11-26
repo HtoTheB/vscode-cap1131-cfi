@@ -2,7 +2,7 @@
   "name": "cap1131-cfi",
   "displayName": "CAP1131 CFI Language Support",
   "description": "Syntax highlighting and language support for CAP1131 IDE .cfi files (IEC 61131-3).",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "htotheb",
   "license": "BSD-3-Clause",
   "repository": {
