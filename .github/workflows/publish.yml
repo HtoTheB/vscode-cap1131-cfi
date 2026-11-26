@@ -9,6 +9,9 @@ jobs:
   publish-vscode-marketplace:
     name: Publish to VS Code Marketplace
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -16,6 +19,4 @@ jobs:
           node-version: 20
       - run: npm ci
       - run: npm test
-      - run: npx --yes @vscode/vsce publish
-        env:
-          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+      - run: npx --yes @vscode/vsce publish --oidc
